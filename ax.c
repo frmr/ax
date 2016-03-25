@@ -17,7 +17,11 @@ typedef enum {
 
 AxMode determineMode(const int argc, char* argv[]) {
     if (argc == 1) {
-        printf("Usage: ax [option] [files]\n");
+        printf("Usage: ax option [files]\n");
+        printf("Options: -c (copy)\n");
+        printf("         -d (delete)\n");
+        printf("         -l (list)\n");
+        printf("         -p (paste)\n");
     }
     else {
         if (!strcmp(argv[1], "-c")) {
