@@ -9,6 +9,7 @@
 
 typedef enum {
     AX_UNKNOWN,
+    AX_NONE,
     AX_COPY,
     AX_DELETE,
     AX_LIST,
@@ -17,11 +18,13 @@ typedef enum {
 
 AxMode determineMode(const int argc, char* argv[]) {
     if (argc == 1) {
-        printf("Usage: ax option [files]\n");
-        printf("Options: -c (copy)\n");
-        printf("         -d (delete)\n");
-        printf("         -l (list)\n");
-        printf("         -p (paste)\n");
+        printf("ax: Usage: ax option [files]\n");
+        printf("    Options: -c (copy)\n");
+        printf("             -d (delete)\n");
+        printf("             -l (list)\n");
+        printf("             -p (paste)\n");
+        
+        return AX_NONE;
     }
     else {
         if (!strcmp(argv[1], "-c")) {
@@ -36,9 +39,9 @@ AxMode determineMode(const int argc, char* argv[]) {
         else if (!strcmp(argv[1], "-p")) {
             return AX_PASTE;
         }
+        
+        return AX_UNKNOWN;
     }
-
-    return AX_UNKNOWN;
 }
 
 FILE* openListFile(char *mode) {
@@ -50,7 +53,7 @@ FILE* openListFile(char *mode) {
     
     FILE *listFile = fopen(listFilename, mode);
     if (listFile == NULL) {
-        printf("Could not open list file\n");
+        printf("ax: Could not open list file\n");
     }
 
     return listFile;
@@ -60,7 +63,10 @@ int main(int argc, char* argv[]) {
 
     AxMode mode =  determineMode(argc, argv);
     
-    if (mode == AX_COPY) {
+    if (mode == AX_UNKNOWN) {
+        printf("ax: Unknown option %s\n", argv[1]);
+    }
+    else if (mode == AX_COPY) {
         FILE *listFile = openListFile("w");
         if (listFile) {
             char cwd[AX_CWD_LENGTH];
@@ -105,7 +111,6 @@ int main(int argc, char* argv[]) {
             }
             fclose(listFile);
         }
-        
     }
     
     return 0;
