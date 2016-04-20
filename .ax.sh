@@ -1,7 +1,7 @@
 case "$1" in
 
     "")
-    echo "ax: Usage:   ax -c|-d|-l|-p [files]"
+    echo "ax: Usage:   ax -a|-c|-d|-l|-p [files]"
     ;;
 
     -c|--copy)
@@ -13,6 +13,14 @@ case "$1" in
     done
     ;;
     
+    -a|--append)
+    shift
+    for arg in "$@"
+    do
+        echo "$(pwd)/$arg" >> ~/.ax
+    done
+    ;;
+
     -d|--delete)
     cat ~/.ax | xargs rm -rf
     shift
